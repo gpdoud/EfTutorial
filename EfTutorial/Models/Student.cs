@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 #nullable disable
 
@@ -22,5 +23,9 @@ namespace EfTutorial.Models
 
         public virtual Major Major { get; set; }
         public virtual ICollection<StudentClass> StudentClasses { get; set; }
+
+        public static implicit operator Task<object>(Student v) {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using EfTutorial.Models;
 
+using Microsoft.EntityFrameworkCore;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EfTutorial {
     
@@ -27,15 +30,15 @@ namespace EfTutorial {
         }
 
 
-        public IEnumerable<Student> GetAll() {
-            return _context.Students.ToList();
+        public async Task<IEnumerable<Student>> GetAll() {
+            return await _context.Students.ToListAsync();
         }
 
-        public Student GetByPK(int id) {
-            return _context.Students.Find(id);
+        public async Task<Student> GetByPK(int id) {
+            return await _context.Students.FindAsync(id);
         }
 
-        public Student Create(Student student) {
+        public async Task<Student> Create(Student student) {
             if(student == null) {
                 throw new Exception("Student cannot be null!");
             }
@@ -43,14 +46,14 @@ namespace EfTutorial {
                 throw new Exception("Student.Id must be zero!");
             }
             _context.Students.Add(student);
-            var rowsAffected = _context.SaveChanges();
+            var rowsAffected = await _context.SaveChangesAsync();
             if(rowsAffected != 1) {
                 throw new Exception("Create failed!");
             }
             return student;
         }
 
-        public void Change(Student student) {
+        public async Task Change(Student student) {
             if(student == null) {
                 throw new Exception("Student cannot be null!");
             }
@@ -58,20 +61,20 @@ namespace EfTutorial {
                 throw new Exception("Student.Id must be greater than zero!");
             }
             _context.Entry(student).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            var rowsAffected = _context.SaveChanges();
+            var rowsAffected = await _context.SaveChangesAsync();
             if(rowsAffected != 1) {
                 throw new Exception("Change failed!");
             }
             return;
         }
 
-        public Student Remove(int id) {
-            var student = _context.Students.Find(id);
+        public async Task<Student> Remove(int id) {
+            var student = await _context.Students.FindAsync(id);
             if(student == null) {
                 return null;
             }
             _context.Students.Remove(student);
-            var rowsAffected = _context.SaveChanges();
+            var rowsAffected = await _context.SaveChangesAsync();
             if(rowsAffected != 1) {
                 throw new Exception("Remove failed!");
             }

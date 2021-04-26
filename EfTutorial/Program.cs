@@ -2,43 +2,44 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace EfTutorial {
     class Program {
-        static void Main(string[] args) {
+        static async Task Main(string[] args) {
 
             var sctrl = new StudentsController();
 
-            //var sGreg = new Student {
-            //    Id = 0, Firstname = "Greg", Lastname = "Doud", StateCode = "OH",
-            //    Gpa = 2.1m, Sat = 805, MajorId = 1
-            //};
-            //var sGregNew = sctrl.Create(sGreg);
-            //Console.WriteLine($"{sGregNew.Id} {sGregNew.Firstname} {sGregNew.Lastname}");
+            var sGreg = new Student {
+                Id = 0, Firstname = "Greg", Lastname = "Doud", StateCode = "OH",
+                Gpa = 2.1m, Sat = 805, MajorId = 1
+            };
+            var sGregNew = await sctrl.Create(sGreg);
+            Console.WriteLine($"{sGregNew.Id} {sGregNew.Firstname} {sGregNew.Lastname}");
 
-            var std = sctrl.GetByPK(63);
+            var std = await sctrl.GetByPK(sGregNew.Id);
 
             std.Firstname = "Gregory";
-            sctrl.Change(std);
+            await sctrl.Change(std);
 
-            var studentDeleted = sctrl.Remove(std.Id);
+            var studentDeleted = await sctrl.Remove(std.Id);
 
 
-            var st = sctrl.GetByPK(63);
+            var st = await sctrl.GetByPK(sGregNew.Id);
             if(st == null) {
                 Console.WriteLine("Not found");
             } else {
                 Console.WriteLine($"{st.Firstname} {st.Lastname}");
             }
 
-            st = sctrl.GetByPK(11111);
+            var st1 = await sctrl.GetByPK(11111);
             if(st == null) {
                 Console.WriteLine("Not found");
             } else {
-                Console.WriteLine($"{st.Firstname} {st.Lastname}");
+                Console.WriteLine($"{st1.Firstname} {st1.Lastname}");
             }
 
-            var students = sctrl.GetAll();
+            var students = await sctrl.GetAll();
             foreach(var s in students) {
                 Console.WriteLine($"{s.Id} {s.Firstname} {s.Lastname}");
             }
